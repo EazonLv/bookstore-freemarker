@@ -5,6 +5,7 @@ import com.yc.bookstore.entity.Book;
 import javax.xml.crypto.Data;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface BookService {
 
@@ -30,15 +31,10 @@ public interface BookService {
 
     /**
      * 按条件查询书籍
-     * @param bookname
-     * @param price
-     * @param sale_amount
-     * @param createtime
-     * @param updatetime
-     * @param is_active
-     * @param sortname
+     * @param map
      * @return
      */
-    public HashMap<String, Object> findBookByCon(String bookname, float price, int sale_amount, Data createtime, Data updatetime, String is_active, String sortname);
+
+    public HashMap<String, Object> findBookByCon(Map<String,Object> map);
 
 }

@@ -23,4 +23,17 @@ public class SortServiceImpl implements SortService {
         SortExample example = new SortExample();
         return sortMapper.selectByExample(example);
     }
+
+    /**
+     * 查找所有有效种类
+     *
+     * @return
+     */
+    @Override
+    public List<Sort> findAllSortsActive() {
+        SortExample example = new SortExample();
+        SortExample.Criteria criteria = example.createCriteria();
+        criteria.andIsActiveEqualTo("Y");
+        return sortMapper.selectByExample(example);
+    }
 }

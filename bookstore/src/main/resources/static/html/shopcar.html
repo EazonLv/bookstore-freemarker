@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="/lib/js/vue.min.js"></script>
+<style>
+* {
+	margin: 0px;
+	padding: 0px;
+}
+.clearfix:after {
+	display: block;
+	content: '';
+	clear: both;
+}
+.fl {
+	float: left;
+}
+.fr {
+	float: right;
+}
+li {
+	list-style: none;
+	line-height: 100px;
+	margin-top: 10px;
+}
+#app {
+	width: 350px;
+	margin: 100px auto;
+}
+.minInput {
+	margin-top: 50px;
+}
+img {
+	width: 100px;
+	height: 100px;
+	vertical-align: middle;
+	padding: 3px;
+	border-radius: 5px;
+	border: 1px solid #fff;
+	margin: 0px 10px;
+}
+.priceFrom {
+	display: inline-block;
+	border: 1px solid #484848;
+	border-radius: 5px;
+	margin: 40px 10px 0px 10px;
+}
+.priceFrom input {
+	width: 30px;
+	height: 18px;
+	border: none;
+	padding-left: 5px;
+}
+.priceFrom span {
+	width: 20px;
+	height: 20px;
+	background: #5f5f5f;
+	color: #fff;
+	text-align: center;
+	font-size: 16px;
+	line-height: 20px;cursor: pointer;
+}
+input:focus {
+	outline: -webkit-focus-ring-color auto 0px;
+}
+.footer {
+	margin-top: 10px;
+	font-size: 14px;
+}
+.footer input {
+	margin-right: 5px;
+}
+.goodsNum {
+	display: inline-block;
+	margin-left: 20px;
+}
+.goodsNum span {
+	color: red;
+}
+.active {
+	border: 1px solid #5f5f5f;
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+  <ul>
+    <li class="clearfix" v-for="(item,index) in list" :key="item.id">
+      <input type="checkbox" class="fl minInput" v-model="item.pd" @click="itemClick(index)"/>
+      <img :src="item.imgUrl" class="fl" :class="{active:item.isActive}"/> <span class="fl">{{item.price.toFixed(2)}}</span>
+      <div class="priceFrom clearfix fl"> <span class="fl" @click="item.num++">+</span>
+        <input class="fl" type="text" v-model="item.num" />
+        <span class="fl" @click="item.num<=0?0:item.num--">-</span> </div>
+      <span class="fl">{{item.num*item.price|priceNum}}</span> <span class="fl" style="color:red;margin-left:5px;cursor: pointer" @click="deleteClick(index)">删除</span> </li>
+  </ul>
+  <div class="footer">
+    <input type="checkbox" @click="totalClick" v-model="totalInt"/>
+    <el-button></el-button>
+    全选
+    <div class="goodsNum"> 已选商品 <span style="margin:0px 5px;">{{goodsNum}}</span>件 合计: <span style="margin:0px 5px;">{{totalNum}}</span>元 </div>
+    <button id="buy" style="cursor: pointer" class="btn btn-default">付款</button>
+  </div>
+</div>
+</body>
+<script>
+		var app = new Vue({
+			el: "#app",
+			data() {
+				return {
+					num: null,
+					list: null,
+					totalInt:false,
+					newList:[]
+				}
+			},
+			filters: {
+				priceNum: function(val) {
+					return val.toFixed(2)
+				}
+			},
+			computed:{
+				totalNum:function(){
+					var total=0;
+					for(var i in this.newList){
+						if(this.newList[i].pd){
+							total+=this.newList[i].price*this.newList[i].num
+						}else{
+							total=0
+						}
+					}
+					return total.toFixed(2)
+				},
+				goodsNum:function(){
+					var goods=0;
+					for(var i in this.newList){
+						if(this.newList[i].pd){
+							goods+=this.newList[i].num;
+						}
+					}
+					return goods
+				}
+			},
+			mounted:function(){
+			    this.data().list = sessionStorage.getItem("bookList");
+			},
+			methods: {
+				deleteClick(index) {
+					if(this.list[index].pd){
+						this.list.splice(index,1);
+						this.newList.splice(index,1)
+					}else{
+						alert('请先选择删除的选项')
+					}
+				},
+				totalClick(){
+					this.totalInt=!this.totalInt
+					if(this.totalInt){
+						for(var i in this.list){
+							this.list[i].pd=true;
+							this.list[i].isActive=true
+							if(this.list[i].pd){
+								this.newList.push(this.list[i]);
+							}
+						}
+					}else{
+						for(var i in this.list){
+							this.list[i].pd=false;
+							this.newList=[];
+							this.list[i].isActive=false
+						}
+					}
+				},
+				itemClick(index){
+					this.list[index].pd=!this.list[index].pd
+					if(this.list[index].pd){
+						this.newList.push(this.list[index]);
+						this.list[index].isActive=true;
+					}else{
+						for(var i in this.newList){
+							if(this.newList[i].pd==false){
+								this.newList.splice(i,1)
+							}
+						}
+						this.list[index].isActive=false;
+					}
+					if(this.newList.length==this.list.length){
+						this.totalInt=true;
+					}else{
+						this.totalInt=false;
+					}
+				}
+			}
+		})
+	</script>
+</html>

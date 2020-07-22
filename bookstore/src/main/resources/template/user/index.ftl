@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>网上书店</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/lib/favicon.ico" type="image/x-icon">
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/lib/css/carousel.css" rel="stylesheet">
     <script src="/lib/jq/jquery-3.3.1.js"></script>
@@ -35,14 +35,26 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">主页</a></li>
-                        <li><a href="#about">书籍分类</a></li>
-                        <li><a href="#contact">咨询</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.username} <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">书籍分类<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">退出</a></li>
+                                <#list sort as s>
+                                    <li><a href="#" id="${s.id}">${s.sortname}</a></li>
+                                </#list>
                             </ul>
                         </li>
+                        <li><a href="#contact">咨询</a></li>
+                            <#if Session["user"]?exists>
+                             <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.username} <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="logout">退出</a></li>
+                                    <li><a href="#" id="shoppingcar">我的购物车</a></li>
+                                </ul>
+                             </li>
+                            <#else >
+                                <li><a href="#" id="login">登录</a></li>
+                            </#if>
                     </ul>
                 </div>
             </div>
@@ -112,8 +124,13 @@
         <div class="col-lg-4">
             <img class="img-circle" src="/lib/img/${b.image}" alt="Generic placeholder image" width="140" height="140">
             <h2>${b.bookname}</h2>
-            <p>价格：${b.price}</p>
+            <p>价格：￥${b.price}</p>
             <p><a class="btn btn-default" href="#" role="button">查看详情 &raquo;</a></p>
+            <p><a class="btn btn-default addCart" href="#" role="button" selfindex="${b_index}">加入购物车 &raquo;</a></p>
+            <input type="hidden" value="￥${b.price}"/>
+            <input type="hidden" value="${b.image}"/>
+            <input type="hidden" value="${b.bookname}"/>
+            <input type="hidden" value="${b.sortid}"/>
         </div><!-- /.col-lg-4 -->
         </#list>
     </div><!-- /.row -->
@@ -173,6 +190,82 @@
 
 
 
+<script>
 
+    $(function () {
+        var books = [];
+        <#list book as b>
+            var book = {
+                'singalPrice' : '￥${b.price}',
+                'img' :'/lib/img/${b.image}',
+                'name' : '${b.bookname}',
+                'sortid' : '${b.sortid}'
+            }
+            books.push(book);
+        </#list>
+
+
+        var booksbuy = [];
+
+
+
+
+        $("#logout").click(function () {
+            $.ajax({
+                url:'/user/logout',
+                type:'post',
+                success:function (data) {
+                    layer.msg(data.retMsg,{time:2000},function () {
+                        location.reload();
+                    })
+                }
+
+            })
+        })
+
+        $("#shoppingcar").click(function () {
+            //iframe层-父子操作
+            layer.open({
+                type: 2,
+                title:'购物车',
+                area: ['1300px', '600px'],
+                fixed: false, //不固定
+                maxmin: false,
+                content: 'html/cart.html',
+                offset:'auto'
+            });
+        })
+
+        $("#login").click(function () {
+            //iframe层-父子操作
+            layer.open({
+                type: 2,
+                title:'登录',
+                area: ['600px', '600px'],
+                fixed: false,
+                maxmin: false,
+                content: 'html/login.html',
+                offset:'auto'
+            });
+        })
+
+        $(".addCart").click(function () {
+            var index = $(this).attr("selfindex");
+
+            var data = {
+                'name' : books[index].name,
+                'img' : books[index].img,
+                'goodTip' : '',
+                'singalPrice' : books[index].singalPrice,
+                'sortid' : books[index].sortid
+            }
+
+            booksbuy.push(data);
+            sessionStorage.setItem("booksbuy",JSON.stringify(booksbuy));
+            layer.msg('加入购物车成功！',{time:1500})
+        })
+    })
+
+</script>
 </body>
 </html>

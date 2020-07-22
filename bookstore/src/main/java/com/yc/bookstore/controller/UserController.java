@@ -22,10 +22,6 @@ public class UserController extends BaseController {
 
     @Resource
     private UserService userService;
-    @Resource
-    private BookService bookService;
-    @Resource
-    private SortService sortService;
 
     @RequestMapping("/loginPage")
     public String loginPage(){
@@ -50,13 +46,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @RequestMapping("/indexPage")
-    public String indexPage(Model model){
 
-        model.addAttribute("book",bookService.findAllBook());
-        model.addAttribute("sort",sortService.findAllSorts());
-        return "user/index";
-    }
 
     @RequestMapping(value = "/logout",method = RequestMethod.POST)
     @ResponseBody

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>网上书店</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/lib/favicon.ico" type="image/x-icon">
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="/lib/jq/jquery-3.3.1.js"></script>
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>

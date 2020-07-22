@@ -11,4 +11,10 @@ public interface SortService {
      */
     public List<Sort> findAllSorts();
 
+    /**
+     * 查找所有有效种类
+     * @return
+     */
+    public List<Sort> findAllSortsActive();
+
 }

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.xml.crypto.Data;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -56,26 +57,29 @@ public class BookServiceImpl implements BookService {
 
     /**
      * 按条件查询书籍
-     *
-     * @param bookname
-     * @param price
-     * @param sale_amount
-     * @param createtime
-     * @param updatetime
-     * @param is_active
-     * @param sortname
+     * @param map1
      * @return
      */
+
     @Override
-    public HashMap<String, Object> findBookByCon(String bookname, float price, int sale_amount, Data createtime, Data updatetime, String is_active, String sortname) {
+    public HashMap<String, Object> findBookByCon(Map<String,Object> map1) {
+
+
         HashMap<String,Object> map = new HashMap<>();
-        map.put("bookname",bookname);
-        map.put("price",price);
-        map.put("sale_amount",sale_amount);
-        map.put("createtime",createtime);
-        map.put("updatetime",updatetime);
-        map.put("is_active",is_active);
-        map.put("sortname",sortname);
+        if (map1.get("bookname")!=null)
+        map.put("bookname",map1.get("bookname"));
+        if (map1.get("price")!=null)
+        map.put("price",map1.get("price"));
+        if (map1.get("sale_amount")!=null)
+        map.put("sale_amount",map1.get("sale_amount"));
+        if (map1.get("createtime")!=null)
+        map.put("createtime",map1.get("createtime"));
+        if (map1.get("updatetime")!=null)
+        map.put("updatetime",map1.get("updatetime"));
+        if (map1.get("is_active")!=null)
+        map.put("is_active",map1.get("is_active"));
+        if (map1.get("sortname")!=null)
+        map.put("sortname",map1.get("sortname"));
         return bookMapper.selectByCon(map);
     }
 }

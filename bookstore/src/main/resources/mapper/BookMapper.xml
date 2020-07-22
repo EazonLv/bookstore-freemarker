@@ -305,7 +305,30 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByCon" parameterType="map" resultMap="map">
-
+  <select id="selectByCon" parameterType="map" resultType="map">
+    select * from book b left outer join sort s
+    <where>
+      <if test="map.bookname != ''and map.bookname !=null">
+        and b.bookname = #{map.bookname}
+      </if>
+      <if test="map.price > 0 and map.price !=null">
+        and b.price between #{map.price}-10 and #{map.price}+10
+      </if>
+      <if test="map.sale_amount > 0 and map.sale_amount  !=null">
+        and b.map.sale_amount = #{map.map.sale_amount}
+      </if>
+      <if test="map.createtime != '' and map.createtime !=null">
+        and b.createtime = #{map.createtime}
+      </if>
+      <if test="map.updatetime != '' and map.updatetime !=null">
+        and b.updatetime = #{map.updatetime}
+      </if>
+      <if test="map.is_active != ''and map.is_active!=null">
+        and b.is_active = #{map.is_active}
+      </if>
+      <if test="map.sortname != '' and map.sortname != null">
+        and s.sortname = #{map.sortname}
+      </if>
+    </where>
   </select>
 </mapper>

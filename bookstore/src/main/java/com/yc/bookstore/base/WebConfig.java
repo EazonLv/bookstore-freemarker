@@ -18,15 +18,19 @@ public class WebConfig implements WebMvcConfigurer {
 
 
         interceptorRegistration.excludePathPatterns("/lib/**");
+        interceptorRegistration.excludePathPatterns("/html/login.html");
+        interceptorRegistration.excludePathPatterns("/favicon.ico");
         interceptorRegistration.excludePathPatterns("/index/**");
         interceptorRegistration.excludePathPatterns("/error/**");
-        interceptorRegistration.excludePathPatterns("/user/**");
+        interceptorRegistration.excludePathPatterns("/user/login");
+        interceptorRegistration.excludePathPatterns("/index");
+        interceptorRegistration.excludePathPatterns("/login");
 
         interceptorRegistration.addPathPatterns("/**");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("static/**").addResourceLocations("classpath:static/**");
     }
 }
