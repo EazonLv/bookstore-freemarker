@@ -85,7 +85,8 @@
                     if(data.retCode == 1){
                         layer.msg(data.retMsg,{time:2000},function () {
                             layer.close(layer.index);
-                             window.parent.location.reload();
+                            sessionStorage.setItem("user",JSON.stringify(data.retData));
+                             window.parent.location.replace("/index");
                         });
                     }else{
                         layer.msg(data.retMsg,{time:2000});

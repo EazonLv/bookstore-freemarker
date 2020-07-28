@@ -42,7 +42,7 @@ public class UserController extends BaseController {
         }else {
             user.setPassword(null);
             request.getSession().setAttribute("user",user);
-            return wrapSuccessResult("登录成功！");
+            return wrapSuccessResult("登录成功！",user);
         }
     }
 

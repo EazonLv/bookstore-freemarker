@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
         interceptorRegistration.excludePathPatterns("/html/login.html");
         interceptorRegistration.excludePathPatterns("/favicon.ico");
         interceptorRegistration.excludePathPatterns("/index/**");
-        interceptorRegistration.excludePathPatterns("/error/**");
+        interceptorRegistration.excludePathPatterns("/error-nologin.html");
         interceptorRegistration.excludePathPatterns("/user/login");
         interceptorRegistration.excludePathPatterns("/index");
         interceptorRegistration.excludePathPatterns("/login");

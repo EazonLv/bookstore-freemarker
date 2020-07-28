@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>网上书店</title>
+    <link rel="shortcut icon" href="/lib/favicon.ico" type="image/x-icon">
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/lib/jq/jquery-3.3.1.js"></script>
+    <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/lib/layer/layer.js"></script>
+
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container">
+        <h1>发生错误啦！</h1>
+        <p>客官，请先登录哦...</p>
+        <p>
+            <a class="btn btn-primary btn-lg" href="javascript:void(0)" id="login" role="button">登录</a>
+            <a class="btn btn-success btn-lg" href="javascript:void(0)" id="toIndex" role="button">返回主页</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    $(function() {
+       $("#login").click(function () {
+                  //iframe层-父子操作
+                  layer.open({
+                      type: 2,
+                      title:'登录',
+                      area: ['600px', '600px'],
+                      fixed: false,
+                      maxmin: false,
+                      content: 'html/login.html',
+                      offset:'auto'
+                  });
+              });
+
+       $("#toIndex").click(function() {
+           location.replace("/index");
+         
+       })
+    })
+</script>
+</body>
+</html>

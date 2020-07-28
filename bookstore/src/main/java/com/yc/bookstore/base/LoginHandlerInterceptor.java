@@ -14,7 +14,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         if(request.getSession().getAttribute("user")!=null){
             return true;
         }else {
-            response.sendRedirect("/error/error-nologin");
+            response.sendRedirect("/error-nologin.html");
             return false;
         }
 

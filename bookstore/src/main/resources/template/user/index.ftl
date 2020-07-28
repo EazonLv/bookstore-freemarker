@@ -14,7 +14,6 @@
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="/lib/layer/layer.js"></script>
     <script src="/lib/js/holder.min.js"></script>
-
 </head>
 <body>
 
@@ -30,30 +29,30 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">网上书店</a>
+                    <a class="navbar-brand" href="javascript:void(0)">网上书店</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">主页</a></li>
+                        <li class="active"><a href="javascript:void(0)">主页</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">书籍分类<span class="caret"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">书籍分类<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <#list sort as s>
-                                    <li><a href="#" id="${s.id}">${s.sortname}</a></li>
+                                    <li><a href="javascript:void(0)" id="${s.id}">${s.sortname}</a></li>
                                 </#list>
                             </ul>
                         </li>
                         <li><a href="#contact">咨询</a></li>
                             <#if Session["user"]?exists>
                              <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.username} <span class="caret"></span></a>
+                                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.username} <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" id="logout">退出</a></li>
-                                    <li><a href="#" id="shoppingcar">我的购物车</a></li>
+                                    <li><a href="javascript:void(0)" id="logout">退出</a></li>
+                                    <li><a href="javascript:void(0)" id="shoppingcar">我的购物车</a></li>
                                 </ul>
                              </li>
-                            <#else >
-                                <li><a href="#" id="login">登录</a></li>
+                            <#else>
+                                <li><a href="javascript:void(0)" id="login">登录</a></li>
                             </#if>
                     </ul>
                 </div>
@@ -78,7 +77,7 @@
             <div class="container">
                 <div class="carousel-caption">
                     <h1>海贼王：山治</h1>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">查看详情</a></p>
+                    <p><a class="btn btn-lg btn-primary" href="javascript:void(0)" role="button">查看详情</a></p>
                 </div>
             </div>
         </div>
@@ -87,7 +86,7 @@
             <div class="container">
                 <div class="carousel-caption">
                     <h1>火影忍者：鸣人</h1>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">查看详情</a></p>
+                    <p><a class="btn btn-lg btn-primary" href="javascript:void(0)" role="button">查看详情</a></p>
                 </div>
             </div>
         </div>
@@ -96,7 +95,7 @@
             <div class="container">
                 <div class="carousel-caption">
                     <h1>死神：黑崎一护</h1>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">查看详情</a></p>
+                    <p><a class="btn btn-lg btn-primary" href="javascript:void(0)" role="button">查看详情</a></p>
                 </div>
             </div>
         </div>
@@ -125,8 +124,8 @@
             <img class="img-circle" src="/lib/img/${b.image}" alt="Generic placeholder image" width="140" height="140">
             <h2>${b.bookname}</h2>
             <p>价格：￥${b.price}</p>
-            <p><a class="btn btn-default" href="#" role="button">查看详情 &raquo;</a></p>
-            <p><a class="btn btn-default addCart" href="#" role="button" selfindex="${b_index}">加入购物车 &raquo;</a></p>
+            <p><a class="btn btn-default" href="javascript:void(0)" role="button">查看详情 &raquo;</a></p>
+            <p><a class="btn btn-default addCart" href="javascript:void(0)" role="button" selfindex="${b_index}">加入购物车 &raquo;</a></p>
             <input type="hidden" value="￥${b.price}"/>
             <input type="hidden" value="${b.image}"/>
             <input type="hidden" value="${b.bookname}"/>
@@ -181,8 +180,8 @@
 
     <!--&lt;!&ndash; FOOTER &ndash;&gt;-->
     <!--<footer>-->
-        <!--<p class="pull-right"><a href="#">Back to top</a></p>-->
-        <!--<p>&copy; 2016 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>-->
+        <!--<p class="pull-right"><a href="javascript:void(0)">Back to top</a></p>-->
+        <!--<p>&copy; 2016 Company, Inc. &middot; <a href="javascript:void(0)">Privacy</a> &middot; <a href="javascript:void(0)">Terms</a></p>-->
     <!--</footer>-->
 </div><!-- /.container -->
 
@@ -191,7 +190,6 @@
 
 
 <script>
-
     $(function () {
         var books = [];
         <#list book as b>
@@ -260,12 +258,15 @@
                 'sortid' : books[index].sortid
             }
 
-            booksbuy.push(data);
-            sessionStorage.setItem("booksbuy",JSON.stringify(booksbuy));
-            layer.msg('加入购物车成功！',{time:1500})
+            if(sessionStorage.getItem("user")==null){
+                layer.msg('请先登录！',{time:1500})
+            }else{
+                booksbuy.push(data);
+                sessionStorage.setItem("booksbuy",JSON.stringify(booksbuy));
+                layer.msg('加入购物车成功！',{time:1500})
+            }
         })
     })
-
 </script>
 </body>
 </html>
