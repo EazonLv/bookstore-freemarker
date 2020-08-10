@@ -104,18 +104,37 @@ $(".header").after($cartContainer);
 // };
 
 var datas = JSON.parse(sessionStorage.getItem('booksbuy'));
+
+
 $.each(datas, function (i, e) {
-    var newTr = '';
-    var $newLi = $('<li class="goods-list">\
+
+        var newTr = '';
+        // var $newLi = $('<li class="goods-list">\
+        //                     <table class= "goods-header" >\
+        //                         <tr>\
+        //                             <td colspan="5">\
+        //                                 <a href="javascript:;" class="check-label check-local-part">\
+        //                                     <i class="checkbox">\
+        //                                         <span class="check-mark"></span>\
+        //                                     </i>\
+        //                                     <em class="check-name">' + e.sortname + '</em>\
+        //                                 </a>\
+        //                             </td>\
+        //                         </tr>\
+        //                     </table >\
+        //                     <table class="goods-body">\
+        //                     </table>\
+        //                 </li>');
+
+        if(e==null){
+            return true;//相当于continue
+        }
+
+
+        var $newLi = $('<li class="goods-list">\
                         <table class= "goods-header" >\
                             <tr>\
                                 <td colspan="5">\
-                                    <a href="javascript:;" class="check-label check-local-part">\
-                                        <i class="checkbox">\
-                                            <span class="check-mark"></span>\
-                                        </i>\
-                                        <em class="check-name">' + i + '</em>\
-                                    </a>\
                                 </td>\
                             </tr>\
                         </table >\
@@ -123,8 +142,11 @@ $.each(datas, function (i, e) {
                         </table>\
                     </li>');
 
-    $(e).each(function (i, e) {
-        newTr += '<tr>\
+        var ii = i;
+
+        $(e).each(function (i, e) {
+
+            newTr += '<tr self-index="'+ii+'">\
                         <td class="goods-col-select">\
                             <a href="javascript:;" class="check-label check-product">\
                                 <i class="checkbox">\
@@ -146,7 +168,7 @@ $.each(datas, function (i, e) {
                         <td class="goods-col-volumes">\
                             <div class="num-ctrl-area clearfix">\
                                 <button class="minus">-</button>\
-                                <input type="text" value="1" class="input">\
+                                <input type="text" value="'+ e.numb + '" class="input">\
                                 <button class="plus">+</button>\
                                 <em class="hint">限购10件</em>\
                             </div>\
@@ -162,10 +184,11 @@ $.each(datas, function (i, e) {
                             </i>\
                         </td>\
                     </tr>';
-    });
+        });
 
-    $newLi.children("table.goods-body").append(newTr);
-    $newLi.appendTo($("ul.goods-ul"));
+        $newLi.children("table.goods-body").append(newTr);
+        $newLi.appendTo($("ul.goods-ul"));
+
 
 });
 
@@ -249,6 +272,7 @@ $.each(datas, function (i, e) {
             this.fixSite = 'fixed';
             this.banOrder = 'banOrder';
             this.edit = 'edit';
+
         },
         //获取当存在删除添加商品时的变动元素
         dynamic1Obj: function () {
@@ -407,13 +431,39 @@ $.each(datas, function (i, e) {
             shopCart.delBtn.on("click", function () {
                 shopCart.floatBox.fadeOut(200);
                 if (shopCart.judge == "global") {
-                    shopCart.checkProductEd.closest(shopCart.goodsTr).remove();
+                    shopCart.checkProductEd.closest(shopCart.goodsList).remove();
+
+                    //删除seesionStorage中的booksbuy元素
+                    var indexs = [];
+                    $(shopCart.checkProductEd.closest(shopCart.goodsTr)).each(function(index, ele){
+                        $ele = $(ele);
+                        var self_index = $ele.attr('self-index');
+                        indexs[index] = self_index;
+
+                    })
+                    for (var i = 0;i<indexs.length;i++){
+                        delete datas[indexs[i]];
+                    }
+                    var booksbuy = datas;
+                    sessionStorage.setItem("booksbuy",JSON.stringify(booksbuy));
+
+
+
                     if (shopCart.checkLocalPart.hasClass(shopCart.checked)) {
                         shopCart.checkLocalPartEd.closest(shopCart.goodsList).remove();
-                        if (shopCart.checkAll.hasClass(shopCart.checked)) {
+
+
+                        // //删除seesionStorage中的booksbuy元素
+                        // sessionStorage.removeItem("booksbuy");
+
+                        if (shopCart.checkAll.hasClass(shopCart.checked)) {     //全选删除
                             shopCart.mzContainer.html("").css("height", '25rem');
+
+
+                            //删除seesionStorage中的booksbuy元素
+                            sessionStorage.removeItem("booksbuy");
                         };
-                    };
+                    };1
                 } else if (shopCart.judge == "singal") {
                     var curLiIndex = shopCart.curUnitBtn.closest(shopCart.goodsList).index();
                     shopCart.curUnitBtn.closest(shopCart.goodsTr).remove();
@@ -421,6 +471,13 @@ $.each(datas, function (i, e) {
                     if (shopCart.goodsList.eq(curLiIndex).find(shopCart.goodsTr).length == 0) {
                         console.log(1)
                         shopCart.goodsList.eq(curLiIndex).remove();
+
+                        console.log(curLiIndex);
+
+                        //删除seesionStorage中的booksbuy相应元素
+                        delete datas[curLiIndex];
+                        var booksbuy = datas;
+                        sessionStorage.setItem("booksbuy",JSON.stringify(booksbuy));
                     };
                 };
                 shopCart.dynamic1Obj();
